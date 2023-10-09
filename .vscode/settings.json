@@ -1,0 +1,7 @@
+{
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.cwd": "${workspaceFolder}/server",
+  "python.testing.pytestArgs": ["-v"],
+  "git.ignoreLimitWarning": true
+}

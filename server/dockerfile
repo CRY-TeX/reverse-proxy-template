@@ -1,0 +1,28 @@
+FROM python as builder
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app
+
+RUN pip install -U pip
+RUN pip install pipenv
+
+COPY Pipfile .
+RUN pipenv install
+
+# lock requirements and dev requirements
+RUN pipenv requirements > requirements.prod.txt
+RUN pipenv requirements --dev > requirements.dev.txt
+
+################################################################
+
+FROM python as dev
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app
+
+RUN pip install -U pip
+
+COPY --from=builder /app/requirements.dev.txt .
+RUN pip install -r requirements.dev.txt

@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  frontend:
+    # The user interface for the project using Vue.js (https://vuejs.org/). It serves as a web editor
+    command: npm run dev
+    restart: unless-stopped
+    container_name: frontend
+    hostname: frontend
+    build:
+      context: ./frontend
+      target: dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - 8080:8080
+      - 8081:8080
+    depends_on:
+      - server
+
+  server:
+    # The backend server for project related data using FastAPI (https://fastapi.tiangolo.com/)
+    command: python -m debugpy --listen 0.0.0.0:5678 -m uvicorn src.app:app --reload --host 0.0.0.0 --port 5000
+    build:
+      context: ./server
+      target: dev
+    container_name: server
+    hostname: server
+    restart: unless-stopped
+    volumes:
+      - ./server:/app
+    environment:
+      - APPLICATION_DATABASE_USER=${APPLICATION_DATABASE_USER}
+      - APPLICATION_DATABASE_PASSWORD=${APPLICATION_DATABASE_PASSWORD}
+      - APPLICATION_DATABASE_HOST=${APPLICATION_DATABASE_HOST}
+      - APPLICATION_DATABASE_DB=${APPLICATION_DATABASE_DB}
+    ports:
+      - 5000:5000
+      - 5678:5678
+
+  reverse-proxy:
+    # The reverse proxy is used to route the requests to the correct services/containers
+    # This makes it possible to use the same domain & port for multiple services
+    command: nginx -g 'daemon off;'
+    container_name: reverse-proxy
+    hostname: reverse-proxy
+    restart: unless-stopped
+    build:
+      context: ./reverse-proxy
+      target: dev
+    ports:
+      - 80:80
+    depends_on:
+      - frontend
+      - server
+      - worker
+
+  database:
+    # The backend database for storing application related data using PostgreSQL (https://www.postgresql.org/)
+    image: postgres:latest
+    container_name: database
+    hostname: database
+    restart: always
+    environment:
+      - POSTGRES_USER=${APPLICATION_DATABASE_USER}
+      - POSTGRES_PASSWORD=${APPLICATION_DATABASE_PASSWORD}
+      - POSTGRES_DB=${APPLICATION_DATABASE_DB}
+    volumes:
+      - database_storage:/var/lib/postgresql/data:rw
+    ports:
+      - 5432:5432
+
+volumes:
+  database_storage:

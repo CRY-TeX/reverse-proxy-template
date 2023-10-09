@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Styles */
+  body {
+    @apply bg-c-gray-light;
+  }
+
+  /* hide arrows
+ Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield !important;
+  }
+
+  /* scrollbar appearance */
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply flex items-center gap-1 px-4 py-2 text-sm font-medium text-center rounded-md bg-c-red text-c-gray-light hover:brightness-95 focus:outline-1 disabled:brightness-75;
+  }
+}
+
+@layer utilities {
+  .noselect,
+  .noselect * {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version; currently supported by Chrome; Edge; Opera and Firefox */
+  }
+}

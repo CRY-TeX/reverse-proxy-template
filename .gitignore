@@ -1,0 +1,47 @@
+# vscode chrome debugger data persistance
+.vscode/chrome-userdata
+
+# Enviroment variables used by docker containers
+.env
+
+__pycache__
+Pipfile.lock
+.python-version
+.pytest_cache
+
+# static / media files on the server
+server/media
+server/static
+
+# vue frontend
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+package-lock.json
+dist
+dist-ssr
+coverage
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# Editor directories and files
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+test-results/
+playwright-report/
